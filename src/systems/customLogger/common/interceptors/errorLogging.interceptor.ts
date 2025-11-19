@@ -7,10 +7,15 @@ import {
 import { catchError, Observable, throwError } from 'rxjs';
 import type { Request } from 'express';
 import { CustomLoggerService } from '../../customLogger.service';
+import { Reflector } from '@nestjs/core';
+import { ERROR_LOG_TAG } from '../decorators/logError.decorator';
 
 @Injectable()
 export class ErrorLoggingInterceptor implements NestInterceptor {
-  constructor(private readonly logger: CustomLoggerService) {}
+  constructor(
+    private readonly logger: CustomLoggerService,
+    private readonly reflector: Reflector,
+  ) {}
 
   intercept(
     context: ExecutionContext,
@@ -18,6 +23,10 @@ export class ErrorLoggingInterceptor implements NestInterceptor {
   ): Observable<unknown> {
     const className = context.getClass().name;
     const handelName = context.getHandler().name;
+
+    const tag =
+      this.reflector.get<string | null>(ERROR_LOG_TAG, context.getHandler()) ??
+      this.reflector.get<string | null>(ERROR_LOG_TAG, context.getClass());
 
     const httpContext = context.switchToHttp();
     const req = httpContext.getRequest<Request | undefined>();
@@ -32,8 +41,10 @@ export class ErrorLoggingInterceptor implements NestInterceptor {
         const errorStack =
           err instanceof Error ? (err.stack ?? '') : String(err);
 
+        const tagPrefix = tag ? `[${tag}] ` : '';
+
         this.logger.error(
-          `Error in [${className} / ${handelName} / ${method ?? ''} / ${url ?? ''}] message=${errorMessage}`,
+          `${tagPrefix}Error in ${className}.${handelName} ${method} ${url} / message=${errorMessage}`,
           errorStack,
         );
 
