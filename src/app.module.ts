@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CustomLoggerModule } from './systems/customMetric/customLogger.module';
+import { CustomLoggerModule } from './systems/customLogger/customLogger.module';
 
 @Module({
   imports: [CustomLoggerModule],
