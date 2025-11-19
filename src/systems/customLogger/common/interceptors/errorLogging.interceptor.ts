@@ -33,7 +33,7 @@ export class ErrorLoggingInterceptor implements NestInterceptor {
           err instanceof Error ? (err.stack ?? '') : String(err);
 
         this.logger.error(
-          `ERROR IN: [${className} / ${handelName}  / ${method ?? ''} / ${url ?? ''}] message=${errorMessage}`,
+          `Error in [${className} / ${handelName} / ${method ?? ''} / ${url ?? ''}] message=${errorMessage}`,
           errorStack,
         );
 
