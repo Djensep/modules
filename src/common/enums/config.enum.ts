@@ -3,6 +3,6 @@ export enum LOG_LEVEL {
   DEBUG = 'DEBUG',
   INFO = 'INFO',
   FATAL = 'FATAL',
-  WARNING = 'WARNING',
+  WARN = 'WARN',
   TRACE = 'TRACE',
 }

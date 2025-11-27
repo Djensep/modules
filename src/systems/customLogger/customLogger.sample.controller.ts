@@ -1,13 +1,14 @@
 import { Controller, Get } from '@nestjs/common';
 import { LogError } from './common/decorators/logError.decorator';
+import { CustomLoggerService } from './customLogger.service';
 
 @Controller()
 export class LoggerExample {
-  constructor() {}
+  constructor(private readonly logger: CustomLoggerService) {}
 
-  @Get()
+  @Get('logger')
   @LogError('GetHello')
-  getHello(): string {
-    throw new Error('Message');
+  getHello() {
+    this.logger.error('erooooor');
   }
 }

@@ -5,7 +5,6 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { catchError, Observable, throwError } from 'rxjs';
-import type { Request } from 'express';
 import { CustomLoggerService } from '../../customLogger.service';
 import { Reflector } from '@nestjs/core';
 import { ERROR_LOG_TAG } from '../decorators/logError.decorator';
@@ -29,7 +28,7 @@ export class ErrorLoggingInterceptor implements NestInterceptor {
       this.reflector.get<string | null>(ERROR_LOG_TAG, context.getClass());
 
     const httpContext = context.switchToHttp();
-    const req = httpContext.getRequest<Request | undefined>();
+    const req = httpContext.getRequest();
     const method = req?.method;
     const url = req?.url;
 
